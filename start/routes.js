@@ -16,17 +16,20 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
+
 Route.get('/', 'StravaController.index');
+
 
 Route.on('/signup').render('auth.signup');
 Route.on('/login').render('auth.login');
 Route.post('/signup', 'UserController.create').validator('CreateUser');
 Route.get('/logout', async ({ auth, response }) => {
     await auth.logout();
-    return response.redirect('/');
+    return response.redirect('/login');
 });
 Route.post('/login', 'UserController.login').validator('LoginUser');
 
 Route.get('/connect', 'StravaController.connect').middleware(['auth'])
+Route.on('/home').render('home').middleware(['auth'])
 
 
