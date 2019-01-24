@@ -1,8 +1,11 @@
 'use strict'
 
 
- 
-const token_is_valid =  (token_time_tamp) => {
+/**
+* Method to see if a timestamp is in the future
+* @in unix time stamp f.e. 1548322227
+*/ 
+const token_is_valid = (token_time_tamp) => {
   
   // #get timestamp for now
   var now = Math.round(new Date().getTime() / 1000);
@@ -13,7 +16,6 @@ const token_is_valid =  (token_time_tamp) => {
   	return false;
   }
 
-  
 }
 
 

@@ -6,6 +6,7 @@ const User = use('App/Models/User')
 const Request = use('Request')
 
 const Helpers = use('App/Helpers/')
+const Trainalytics = use('App/Helpers/Trainalytics')
 
 class StravaController {
 
@@ -15,72 +16,66 @@ class StravaController {
 	*/
 	async index ({view, request, auth, session, response}) {
 
+		// Is user logged in?
 		try {
 			await auth.check()
 		} catch (error) {
 			return response.redirect('/login');
 		}
 
-		
-		// Is user logged in
+		let tokens, user_token, token_is_valid, activities;
+    	// user is logged in. get user	
         let user = await auth.getUser();
 
-		
+    	// is strava already authorized?
+		if(user.strava_authorized){
 
-        if (user) {
+			// get the tokens from the user
+			tokens = user.getStravaTokens()	;
 
-        	
+		} else {
 
-        	let tokens;
-        	let user_token ;
-        	let token_is_valid;
-        	let activities;
-        	// is strava already authorized?
-			if(user.strava_authorized){
+			// oauth needs to finalize. get tokens
+			tokens = await this.getStravaTokens(request);
 
-				console.log('strava_authorized');
+			// set tokens for this user
+			user.setStravaTokens(tokens);
 
-				// if not get the tokens from the user
-				tokens = user.getStravaTokens()	;
-
-				
-
-			} else {
-
-				console.log('fresh token');
-
-				// oauth needs to finalize. get tokens
-				tokens = await this.getStravaTokens(request);
-
-				// set tokens for this user
-				user.setStravaTokens(tokens);
-
-			}
-
-			console.log(tokens);        	
-
-			// make sure token is still valid
-			token_is_valid = Helpers.token_is_valid(tokens.expires_at);
-        	
-        	console.log('token_is_valid = ' + token_is_valid);
-        	
-        	if(token_is_valid){
-
-        		// get strava activities for this user
-				// let athlete = await this.getStravaAthlete(token);
-
-        		activities = await this.getStravaActivities(tokens);
-
-        		return view.render('index', { user: user.toJSON(), activities:activities })
-
-        	} 
-
-			// user is not logged in
-			return view.render('index', { user: user.toJSON()})
 		}
-	  	
-	  	
-	  	response.redirect('/login');
+
+		// make sure token is still valid
+		token_is_valid = Helpers.token_is_valid(tokens.expires_at);
+    	
+    	if(token_is_valid){
+
+    		// to get athlete properties as stored @strava
+			// let athlete = await this.getStravaAthlete(token);
+
+			// get strava activities for this user
+    		activities = await this.getStravaActivities(tokens);
+
+    	} else {
+
+    		console.log('old tokens', tokens);
+
+    		// get a new access token with the refresh token
+    		const new_tokens = await this.getNewStravaAccesToken(tokens);
+
+			// set tokens for this user
+			user.setStravaTokens(new_tokens);
+
+			console.log('new access_token', new_tokens);
+
+			//get activities with the new access token
+			activities = await this.getStravaActivities(new_tokens);
+    	}
+
+    	// get all calculated data based on these activities
+    	const chart_data = Trainalytics.getChartValues(activities);
+
+
+		return view.render('index', { user: user.toJSON(), activities:chart_data })
+		
 
 	}
 
@@ -105,13 +100,25 @@ class StravaController {
 
 	}
 
-	async getStravaActivities(payload){
+	async getNewStravaAccesToken(tokens){
 
-		console.log('token = ' + payload.access_token);
+		return new Promise((resolve, reject) => {
+		
+			strava.oauth.getToken({'refresh_token':tokens.refresh_token, 'grant_type':'refresh_token'},function(err,payload,limits) {
+			    	
+				resolve(payload);
+
+			});				
+
+		});
+
+	}	
+
+	async getStravaActivities(payload){
 
 		return new Promise((resolve, reject) => {
 			
-			strava.athlete.listActivities({'access_token':payload.access_token, per_page:10},function(err,payload,limits) {
+			strava.athlete.listActivities({'access_token':payload.access_token, per_page:30},function(err,payload,limits) {
 
 				resolve(payload);				
 
