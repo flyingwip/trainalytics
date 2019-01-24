@@ -37,7 +37,7 @@ function formatToDutchDate(dateString){
   	var monthIndex = date.getMonth();
   	var year = date.getFullYear();
 
-  	return day + ' ' + monthNames[monthIndex] + ' ' + year ;
+  	return day + ' ' + monthNames[monthIndex] + ' ' + year  ;
   	
 
 }
@@ -97,9 +97,9 @@ function getChartValues(activities){
 	let average_last_works = Math.round(_.meanBy(last, (p) => p.average_watts));	
 
 	return {
-		results: arr_average_watts,
+		results: arr_average_watts.reverse(),
 		amount_training_sessions : wattworks_activities.length, 
-		dates: training_dates,
+		dates: training_dates.reverse(),
 		average:average,
 		max : max,
 		min : min,

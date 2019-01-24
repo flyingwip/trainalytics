@@ -5,8 +5,179 @@ Trainalytics - The only way is up!
 @endsection
 
 @section('content')
-  <h1>activities</h1>
+ 
+  
+  <section class="hero is-warning ">
+  <div class="hero-body">
+    <div class="container is-widescreen is-fullhd">
+      <h2 class="subtitle">
+        Een analyse van je laatste {{activities.results.length}} trainingen. De waarden die je ziet zijn gemiddeld.
+      </h2>
+    </div>
+  </div>
+</section>
 
- {{ toJSON(activities)}}
+
+
+<section class="hero is-small is-light is-bold">
+  <div class="hero-body">
+    <div class="container">
+      
+        <nav class="level is-mobile">
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Powerworks</p>
+      <p class="title">{{ activities.average_pw_works}}</p>
+    </div>
+  </div>
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Speedworks</p>
+      <p class="title">{{ activities.average_sp_works}}</p>
+    </div>
+  </div>
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Blockworks</p>
+      <p class="title">{{ activities.average_bl_works}}</p>
+    </div>
+  </div>
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="heading">Climbworks</p>
+      <p class="title">{{ activities.average_cl_works}}</p>
+    </div>
+  </div>
+</nav>
+
+
+
+    </div>
+  </div>
+</section>
+
+
+
+<section class="hero is-info ">
+  <div class="hero-body">
+    <div class="container">
+        <h1 class="title">
+          My Training Results
+        </h1>
+        <canvas id="myChart" width="400" height="200"></canvas>
+   
+    </div>
+  </div>
+</section>
+
+<section class="hero is-small is-light is-bold">
+  <div class="hero-body">
+    <div class="container">
+    </div>
+  </div>
+</section>      
+  
+<div class="tile is-ancestor">
+  <div class="tile is-vertical is-8">
+    <div class="tile">
+      <div class="tile is-parent is-vertical">
+        <article class="tile is-child notification is-primary">
+          <p class="title">Streefwattage is</p>
+          <p ><span class="tag is-large">{{activities.next}}</span></p>
+        </article>
+        <article class="tile is-child notification is-warning">
+          <p class="title">...tiles</p>
+          <p class="subtitle">Bottom tile</p>
+        </article>
+      </div>
+      <div class="tile is-parent">
+        <article class="tile is-child notification is-info">
+          <p class="title">Middle tile</p>
+          <p class="subtitle">With an image</p>
+          <figure class="image is-4by3">
+            <img src="https://bulma.io/images/placeholders/640x480.png">
+          </figure>
+        </article>
+      </div>
+    </div>
+    <div class="tile is-parent">
+      <article class="tile is-child notification is-danger">
+        <p class="title">Wide tile</p>
+        <p class="subtitle">Aligned with the right tile</p>
+        <div class="content">
+          <!-- Content -->
+        </div>
+      </article>
+    </div>
+  </div>
+  <div class="tile is-parent">
+    <article class="tile is-child notification is-success">
+      <div class="content">
+        <p class="title">Tall tile</p>
+        <p class="subtitle">With even more content</p>
+        <div class="content">
+          <!-- Content -->
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+    <input type="hidden" id="graph_labels" value="{{ toJSON(activities.dates) }}"
+    /> 
+    
+
+
+
+
+<script>
+        
+      var labels = JSON.parse(document.getElementById('graph_labels').value); 
+
+      var ctx = document.getElementById("myChart").getContext('2d');
+      var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: labels ,
+              datasets: [{
+                  label: 'Gem Wattage per training',
+                  data: [{{activities.results}}],
+                  backgroundColor: [
+                      'rgba(255, 255, 255, 0.4)',
+                  ],
+                  borderColor: [
+                      'rgba(255,99,132,1)',
+                  ],
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero:false,
+                          fontColor: "white",
+                          fontSize: 12,
+                      }
+                  }],
+                    xAxes: [{
+                        ticks: {
+                            fontColor: "white",
+                            fontSize: 12,
+                        }
+                    }]
+
+              },
+              legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    fontColor: 'white',
+                    fontSize: 12,
+                }
+            }
+          }
+      });
+</script>
+
   
 @endsection
+
