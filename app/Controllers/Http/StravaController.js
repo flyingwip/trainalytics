@@ -104,7 +104,7 @@ class StravaController {
 
 		return new Promise((resolve, reject) => {
 		
-			strava.oauth.getToken({'refresh_token':tokens.refresh_token, 'grant_type':'refresh_token'},function(err,payload,limits) {
+			strava.oauth.getToken({'refresh_token':tokens.refresh_token, 'grant_type':'refresh_token', 'access_token':'dummy'},function(err,payload,limits) {
 			    	
 				resolve(payload);
 
