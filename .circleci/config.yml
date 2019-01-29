@@ -8,6 +8,8 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:10.15
+
+
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -26,7 +28,10 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: yarn install
+      # ------------------------------------------
+      # install the adonis CLI
+      # ------------------------------------------
+      - run: npm i -g @adonisjs/cli
 
       - save_cache:
           paths:
