@@ -36,4 +36,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
 
+      - run:
+          name: adonis-test
+          command: 'adonis test'
 
