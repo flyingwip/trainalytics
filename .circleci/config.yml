@@ -34,7 +34,10 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-        
+
+      - run:
+          name: npm-install
+          command: 'npm install'        
 
       - run:
           name: adonis-test
