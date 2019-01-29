@@ -28,10 +28,9 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      # ------------------------------------------
-      # install the adonis CLI
-      # ------------------------------------------
-      - run: npm i -g @adonisjs/cli
+       - run:
+          name: @adonisjs/cli
+          command: npm install
 
       - save_cache:
           paths:
