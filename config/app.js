@@ -3,6 +3,8 @@
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env')
 
+
+
 module.exports = {
 
   /*
@@ -27,7 +29,7 @@ module.exports = {
   | to encrypted cookies, sessions and other sensitive data.
   |
   */
-  appKey: Env.getOrFail('APP_KEY'),
+  appKey: Env.getOrFail('APP_KEY', 'mOQXY7YI9rXfhzDuPcPpbk6XLlJskrwa'),
 
   http: {
     /*
