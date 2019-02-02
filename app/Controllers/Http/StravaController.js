@@ -118,7 +118,7 @@ class StravaController {
 
 		return new Promise((resolve, reject) => {
 			
-			strava.athlete.listActivities({'access_token':payload.access_token, per_page:30},function(err,payload,limits) {
+			strava.athlete.listActivities({'access_token':payload.access_token, per_page:90},function(err,payload,limits) {
 
 				resolve(payload);				
 

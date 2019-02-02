@@ -30,6 +30,6 @@ Route.get('/logout', async ({ auth, response }) => {
 Route.post('/login', 'UserController.login').validator('LoginUser');
 
 Route.get('/connect', 'StravaController.connect').middleware(['auth'])
-Route.on('/home').render('home').middleware(['auth'])
+Route.on('/home').render('home')
 
 
