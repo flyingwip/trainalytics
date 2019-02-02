@@ -56,7 +56,7 @@ class StravaController {
 
     	} else {
 
-    		console.log('old tokens', tokens);
+    		//console.log('old tokens', tokens);
 
     		// get a new access token with the refresh token
     		const new_tokens = await this.getNewStravaAccesToken(tokens);
