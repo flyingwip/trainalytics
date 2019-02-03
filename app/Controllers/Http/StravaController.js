@@ -3,7 +3,7 @@
 const strava = require('strava-v3');
 
 const User = use('App/Models/User')
-const Request = use('Request')
+
 
 const Helpers = use('App/Helpers/')
 const Trainalytics = use('App/Helpers/Trainalytics')
