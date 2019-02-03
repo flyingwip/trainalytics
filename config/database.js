@@ -6,9 +6,6 @@ const Env = use('Env')
 /** @type {import('@adonisjs/ignitor/src/Helpers')} */
 const Helpers = use('Helpers')
 
-const Url = require('url-parse')
-const PG_DATABASE_URL = new Url(Env.get('DATABASE_URL'))
-
 module.exports = {
   /*
   |--------------------------------------------------------------------------
@@ -19,14 +16,7 @@ module.exports = {
   | interacting with SQL databases.
   |
   */
-  //connection: Env.get('DB_CONNECTION', 'sqlite'),
-  connection: {
-      host: Env.get('DB_HOST', PG_DATABASE_URL.host),
-      port: Env.get('DB_PORT', PG_DATABASE_URL.port),
-      user: Env.get('DB_USER', PG_DATABASE_URL.username),
-      password: Env.get('DB_PASSWORD', PG_DATABASE_URL.password),
-      database: Env.get('DB_DATABASE', PG_DATABASE_URL.pathname.substr(1))
-  }   
+  connection: Env.get('DB_CONNECTION', 'sqlite'),
 
   /*
   |--------------------------------------------------------------------------
